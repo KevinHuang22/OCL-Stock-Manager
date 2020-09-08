@@ -38,10 +38,11 @@ namespace OCL_Apis.Controllers
         // GET: api/Resources
         [EnableCors("ProductionPolicy")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Resource>>> GetResources()
+        public async Task<ActionResult<IEnumerable<Resource>>> GetResources(string searchString)
         {
             //todo search
-            return await _context.Resources.ToListAsync();
+            var resoueces = ResourcesQuery(searchString);
+            return await resoueces.ToListAsync();
         }
 
         // GET: api/Resources/5
@@ -67,6 +68,11 @@ namespace OCL_Apis.Controllers
         public async Task<IActionResult> PutResource(long id, ResourceStatus resourceStatus)
         {
             Resource resource = _context.Resources.Find(id);
+
+            if (resource == null)
+            {
+                return NotFound();
+            }
 
             var currentUser = "Evans";
             var date = DateTime.Now;
@@ -117,7 +123,7 @@ namespace OCL_Apis.Controllers
                 }
             }
 
-            return CreatedAtAction(nameof(GetResource), new { id = resource.Id }, resource);
+            return NoContent();
         }
 
         // POST: api/Resources

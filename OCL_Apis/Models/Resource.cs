@@ -1,14 +1,20 @@
-﻿using System;
+﻿
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OCL_Apis.Models
 {
     public enum ResourceStatus
     {
-        Arrived, Production, Consumed
+        Arrived,
+        Production,
+        Consumed
     }
 
     public enum CanType
@@ -27,6 +33,7 @@ namespace OCL_Apis.Models
         public int Good { get; set; }
         public int Bad { get; set; }
         public CanType CanType { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResourceStatus ResourceStatus { get; set; }
         public string Note { get; set; }
     }

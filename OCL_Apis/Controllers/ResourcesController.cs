@@ -65,7 +65,7 @@ namespace OCL_Apis.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [EnableCors("ProductionPolicy")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutResource(long id, ResourceStatus resourceStatus)
+        public async Task<IActionResult> PutResource(long id, ResourceStatus newStatus)
         {
             Resource resource = _context.Resources.Find(id);
 
@@ -74,16 +74,20 @@ namespace OCL_Apis.Controllers
                 return NotFound();
             }
 
+            //prevent double Production/Consumed
+            if (resource.ResourceStatus >= newStatus)
+            {
+                return BadRequest();
+            }
             var currentUser = "Evans";
             var date = DateTime.Now;
 
-            if (resourceStatus == ResourceStatus.Production)
+            if (newStatus == ResourceStatus.Production)
             {
                 //check if there are any resource in plant
-
-                if (_context.Resources.Any(r => r.ResourceStatus == resourceStatus))
+                if (_context.Resources.Any(r => r.ResourceStatus == newStatus))
                 {
-                    Resource prevResource = _context.Resources.FirstOrDefault(r => r.ResourceStatus == resourceStatus);
+                    Resource prevResource = _context.Resources.FirstOrDefault(r => r.ResourceStatus == newStatus);
                     prevResource.ResourceStatus = ResourceStatus.Consumed;
 
                     var preNewNote = $"On {date}, this pallet of resource has been used, operator: {currentUser}.\n";
@@ -97,7 +101,7 @@ namespace OCL_Apis.Controllers
                 var newNote = $"On {date}, this pallet of resource has been using, operator: {currentUser}.\n";
                 resource.Note += newNote;
             }
-            else if (resourceStatus == ResourceStatus.Consumed)
+            else if (newStatus == ResourceStatus.Consumed)
             {
                 resource.ResourceStatus = ResourceStatus.Consumed;
                 //log the activities history
@@ -133,6 +137,10 @@ namespace OCL_Apis.Controllers
         [HttpPost]
         public async Task<ActionResult<Resource>> PostResource(Resource resource)
         {
+            //check if there is a resource with the same batch number already exist
+            if (ResourceExists(resource.Id)){
+                return BadRequest();
+            }
 
             if (resource.CanType == CanType._502)
             {

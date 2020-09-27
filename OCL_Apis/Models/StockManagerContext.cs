@@ -13,7 +13,11 @@ namespace OCL_Apis.Models
         {
         }
 
-        public DbSet<Resource> Resources { get; set; }
+        //public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Tinplate> Tinplates { get; set; }
 
     }
 }

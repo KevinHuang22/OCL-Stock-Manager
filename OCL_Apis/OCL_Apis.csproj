@@ -7,6 +7,16 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200909122242_statusName.cs" />
     <Compile Remove="Migrations\20200909122242_statusName.Designer.cs" />
+    <Compile Remove="Migrations\20200927080854_customerOrderTinplate.cs" />
+    <Compile Remove="Migrations\20200927080854_customerOrderTinplate.Designer.cs" />
+    <Compile Remove="Migrations\20200927082323_orderIdType.cs" />
+    <Compile Remove="Migrations\20200927082323_orderIdType.Designer.cs" />
+    <Compile Remove="Migrations\20200927082525_order.OrderIdType.cs" />
+    <Compile Remove="Migrations\20200927082525_order.OrderIdType.Designer.cs" />
+    <Compile Remove="Migrations\20200927083034_initialCreate.cs" />
+    <Compile Remove="Migrations\20200927083034_initialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200927084722_initialCreate.cs" />
+    <Compile Remove="Migrations\20200927084722_initialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace OCL_Apis
 
             using (var scope = host.Services.CreateScope())
             {
-                //var services = scope.ServiceProvider;
+                var services = scope.ServiceProvider;
 
                 //try
                 //{

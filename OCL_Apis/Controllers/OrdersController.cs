@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace OCL_Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     public class OrdersController : ControllerBase
     {
         private readonly StockManagerContext _context;
@@ -22,9 +24,16 @@ namespace OCL_Apis.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders(string searchString)
         {
-            return await _context.Orders.ToListAsync();
+            var orders = from o in _context.Orders
+                            select o;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(o => o.OrderNumber.Contains(searchString));
+            }
+
+            return await orders.ToListAsync();
         }
 
         // GET: api/Orders/5
